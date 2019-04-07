@@ -25,7 +25,7 @@ export default {
 		class ParticleText {
 
 			constructor(){
-				this.pixiapp = new PIXI.Application(window.innerWidth, window.innerHeight, {
+				this.pixiapp = new PIXI.Application(window.innerWidth, 300, {
 					resolution: window.devicePixelRatio,
 					autoresize: true
 				});
@@ -36,6 +36,7 @@ export default {
 				this.particles = [];
 				this.container = new PIXI.ParticleContainer(15000);
 				console.log(this.container);
+				this.container.setTransform (0, 0.5, 1, 1, 0, 0, 0, 0, 0);
 				this.pixiapp.stage.addChild(this.container);
 				this.addObjects();
 			}
@@ -92,8 +93,8 @@ export default {
 		class Particle {
 			constructor(x,y, texture, size){
 
-				this.x = x;
-				this.y = y;
+				this.x = x+50;
+				this.y = y+50;
 				this.sprite = new PIXI.Sprite(new PIXI.Texture(texture));
 				this.sprite.texture.frame = new PIXI.Rectangle(x,y,size,size);
 				this.sprite.x = x;
@@ -153,10 +154,15 @@ export default {
 	#app
 		text-align: center
 		color: #2c3e50
-		background-color: white
+		background-color: $black
 		width: 100vw
 		height: 100vh
 		position: absolute
 		top: 0
 		left: 0
+		canvas
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
 </style>
