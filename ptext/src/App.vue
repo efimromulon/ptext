@@ -13,88 +13,21 @@ export default {
 	},
 	data(){
 		return {
+			//particless: null,
 		}
 	},
 	created(){
 		
 	},
 	mounted(){
-				let that = this;
-		
+		/* eslint-disable */
+		let that = this;
 
-		class ParticleText {
-
-			constructor(){
-				this.pixiapp = new PIXI.Application(window.innerWidth, 300, {
-					resolution: window.devicePixelRatio,
-					autoresize: true
-				});
-				that.$refs.appp.appendChild(this.pixiapp.view);
-				this.particleSize = 2;
-				this.rows = 60;
-				this.cols = 800;
-				this.particles = [];
-				this.container = new PIXI.ParticleContainer(15000);
-				console.log(this.container);
-				this.container.setTransform (0, 0.5, 1, 1, 0, 0, 0, 0, 0);
-				this.pixiapp.stage.addChild(this.container);
-				this.addObjects();
-			}
-			addObjects(){
-
-				PIXI.loader.add('textt', 'text.png').load((loader, resources) => {
-
-					const canvas = document.createElement('canvas');
-					const ctx = canvas.getContext('2d');
-					canvas.width = this.cols*this.particleSize;
-					canvas.height = this.rows*this.particleSize;
-					ctx.drawImage(resources.textt.data, 0, 0);
-
-					function hasFill(x,y, size) {
-						for (let i = 0; i < size; i+=1) {
-							for (let j = 0; j < size; j+=1) {
-								if(ctx.getImageData(x+i, y+i,1,1).data[2]>0) return true;
-							}
-						}
-						return false;
-					}
-
-
-					for (let i = 0; i < this.cols; i+=1) {
-						for (let j = 0; j < this.rows; j+=1) {
-							if(hasFill(i*this.particleSize, j*this.particleSize, this.particleSize)) {
-								const p = new Particle(i*this.particleSize, j*this.particleSize, resources.textt.texture, this.particleSize);
-								this.particles.push(p);
-								this.container.addChild(p.sprite);
-							}
-						}
-					}
-
-					this.animate();
-
-				});
-
-			}
-
-			animate(){
-
-				this.pixiapp.ticker.add(() => {
-
-					this.mouse = this.pixiapp.renderer.plugins.interaction.mouse.global;
-					this.particles.forEach(p => {
-						p.update(this.mouse);
-					});
-
-				});
-
-			}
-		};
 
 		class Particle {
 			constructor(x,y, texture, size){
-
-				this.x = x+50;
-				this.y = y+50;
+				this.x = x;
+				this.y = y;
 				this.sprite = new PIXI.Sprite(new PIXI.Texture(texture));
 				this.sprite.texture.frame = new PIXI.Rectangle(x,y,size,size);
 				this.sprite.x = x;
@@ -144,7 +77,89 @@ export default {
 
 		};
 
+		class ParticleText {
+
+			constructor(){
+				this.pixiapp = new PIXI.Application(window.innerWidth, window.innerHeight, {
+					//resolution: window.devicePixelRatio,
+					//autoresize: true
+				});
+				that.$refs.appp.appendChild(this.pixiapp.view);
+				this.particleSize = 2;
+				this.rows = 250;
+				this.cols = 800;
+				this.particless = [];
+				this.container = new PIXI.ParticleContainer(15000);
+				this.pixiapp.stage.addChild(this.container);
+				this.addObjects();
+			}
+			addObjects(){
+				console.log('1');
+				PIXI.loader.add('textt', 'd.jpg').load((loader, resources) => {
+
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
+
+					canvas.width = this.cols*this.particleSize;
+					canvas.height = this.rows*this.particleSize;
+
+					ctx.drawImage(resources.textt.data, 0, 0);
+
+					//console.log(canvas);
+
+					function hasFill(x,y, size) {
+						for (let i = 0; i < size; i+=1) {
+							for (let j = 0; j < size; j+=1) {
+
+									//console.log(ctx.getImageData(x+i, y+i,1,1).data);
+								if(ctx.getImageData(x+i, y+i,1,1).data[2]>0) {
+									//console.log(ctx.getImageData(x+i, y+i,1,1).data);
+									return true;
+								};
+							}
+						}
+						return false;
+					}
+
+
+					for (let i = 0; i < this.cols; i+=1) {
+						for (let j = 0; j < this.rows; j+=1) {
+							
+							if(hasFill(i*this.particleSize, j*this.particleSize, this.particleSize)){
+								console.log(i, j, ':::', i*this.particleSize, j*this.particleSize, this.particleSize);
+							console.log( hasFill(i*this.particleSize, j*this.particleSize, this.particleSize) );
+						};
+							if((hasFill(i*this.particleSize, j*this.particleSize, this.particleSize))) {
+								const p = new Particle(i*this.particleSize, j*this.particleSize, resources.textt.texture, this.particleSize);
+								
+								this.particless.push(p);
+								//console.log(this.particless);
+								this.container.addChild(p.sprite);
+							}
+						}
+					}
+					this.animate();
+
+				});
+
+			}
+
+			animate(){
+
+				this.pixiapp.ticker.add(() => {
+
+					this.mouse = this.pixiapp.renderer.plugins.interaction.mouse.global;
+					this.particless.forEach(p => {
+						p.update(this.mouse);
+					});
+
+				});
+
+			}
+		};
+
 		let PT = new ParticleText();
+		console.log('end',PT);
 
 	},
 }
@@ -161,8 +176,8 @@ export default {
 		top: 0
 		left: 0
 		canvas
-			position: absolute
-			top: 50%
-			left: 50%
-			transform: translate(-50%, -50%)
+			// position: absolute
+			// top: 50%
+			// left: 50%
+			// transform: translate(-50%, -50%)
 </style>
